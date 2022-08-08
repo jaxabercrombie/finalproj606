@@ -1,0 +1,28 @@
+name: "Investigating California's COVID-19 Vaccination Efforts by Region and County"
+output_dir: "."
+navbar:
+  title: "Investigating California's COVID-19 Vaccination Efforts by Region and County"
+  left:
+    - text: "Project Homepage"
+      href: index.html
+    - text: "Data Sourcing and Wrangling"
+      href: data.html
+    - text: "Data Tables"
+      href: tables.html
+    - text: "Source Code"
+      href: sourcecode.html
+    - text: "Contact Information"
+      href: contact.html
+    - text: "PM-606 Progress Report #1"
+      href: Prog1.html
+    - text: "PM-606 Progress Report #2"
+      href: Prog2.html
+    - text: "PM-606 Progress Report #3"
+      href: Prog3.html
+    - text: "PM-606 Final Report (w/o source code)"
+      href: fp-h.html
+    - text: "PM-606 Final Report (w/ source code)"
+      href: fp-i.html
+output:
+  html_document:
+    theme: sandstone

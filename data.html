@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data Sourcing and Wrangling</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Investigating California's COVID-19 Vaccination Efforts by Region and County</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Project Homepage</a>
+</li>
+<li>
+  <a href="data.html">Data Sourcing and Processing</a>
+</li>
+<li>
+  <a href="tables.html">Data Tables</a>
+</li>
+<li>
+  <a href="sourcecode.html">Source Code</a>
+</li>
+<li>
+  <a href="contact.html">Contact Information</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data Sourcing and Wrangling</h1>
+
+</div>
+
+
+<p><span class="math display">\[\\[.05in]\]</span></p>
+<div id="finding-the-data" class="section level3">
+<h3><u>Finding the Data</u></h3>
+<p>Once deciding on primary and secondary research questions, the search for the datasets used in this project became easier. Since data repositories for COVID-19 are often readily available to the public these days, finding government websites to export data was fairly easy, and the LA City Data site and the California Department of Health and Human Services were wonderful sources of thorough data. However, because my questions were varied in topic, I had to use multiple datasets and find means to merge them in some cases.</p>
+<p><span class="math display">\[\\[.1in]\]</span></p>
+</div>
+<div id="about-the-datasets-used" class="section level3">
+<h3><u>About the Datasets Used</u></h3>
+<p>There were three different sets of data used for this project: (1) data for CA counties and their administered vaccine doses, (2) data regarding COVID-19 cases and deaths for each CA county, and (3) demographic data based on vaccine administration. Each data set was used up until the date of October 31, 2021 for consistency and to ensure the most complete data was used.</p>
+<p>The data about vaccine doses for each county, titled “Vaccines by California County,” came from LA city’s data site at <a href="https://data.lacity.org/COVID-19/Vaccines-by-California-County/rpp7-mevy">this link</a>. This particular set has data from the start of vaccine roll-out in mid-December 2020 and is updated regularly. It includes dose data for each vaccine company per county, county population count, and administration date, among many other variables.</p>
+<p>Data regarding COVID-related cases and deaths, titled “Statewide COVID-19 Cases Deaths Tests,” came from the California Department of Health and Human Services at <a href="https://data.chhs.ca.gov/dataset/covid-19-time-series-metrics-by-county-and-state/resource/046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a">this link</a>. Variables include COVID-related cases and deaths, both raw and cumulative, tests conducted, and population counts, among many other variables. The data begins in February of 2020 and is updated regularly.</p>
+<p>The set of data containing information about administered vaccines by demographic characteristics, titled “Vaccine demographic data,” was sourced from <a href="https://data.lacity.org/COVID-19/Vaccine-demographic-data/iv7a-6rrq">this link</a>. It contains data about who is fully and partially vaccinated based on demographic characteristics like age and race and ethnicity. Complete data is roughly up to October 31, 2021, which explains why the figures and tables created for the data use that date.</p>
+<p><span class="math display">\[\\[.1in]\]</span></p>
+</div>
+<div id="wrangling-the-data" class="section level3">
+<h3><u>Wrangling the Data</u></h3>
+<p>In original iterations of this project, the demographic data for age and race was incredibly large, rendering GitHub commits and pushes unable to be carried out. To fix this issue, functions for cleaning and wrangling the entire dataset were created. A single day of information was extracted from the demographic datasets, a region variable was created from county data, a variable for percent individuals fully vaccinated was created, and unique rows were eliminated for ease of plotting the data. The difference between the first and second <em>datawrangle()</em> and <em>datawrangle2()</em> functions is whether unique rows are removed in order to show how data is stratified when used in tables.</p>
+<div id="datawrangle" class="section level5">
+<h5><strong><em>datawrangle()</em></strong></h5>
+<pre class="r"><code>datawrangle &lt;- function(category) {
+  # Region categories to sort counties
+  superior &lt;- c(&quot;Butte&quot;, &quot;Colusa&quot;, &quot;Del Norte&quot;, &quot;Glenn&quot;, &quot;Humboldt&quot;, &quot;Lake&quot;, 
+                &quot;Lassen&quot;, &quot;Mendocino&quot;, &quot;Modoc&quot;, &quot;Nevada&quot;, &quot;Plumas&quot;, &quot;Shasta&quot;, 
+                &quot;Sierra&quot;, &quot;Siskiyou&quot;, &quot;Tehama&quot;, &quot;Trinity&quot;)
+  central &lt;- c(&quot;Alpine&quot;, &quot;Amador&quot;, &quot;Calaveras&quot;, &quot;El Dorado&quot;, &quot;Fresno&quot;, &quot;Inyo&quot;, 
+               &quot;Kings&quot;, &quot;Madera&quot;, &quot;Mariposa&quot;, &quot;Merced&quot;, &quot;Mono&quot;, &quot;Placer&quot;, 
+               &quot;Sacramento&quot;, &quot;San Joaquin&quot;, &quot;Stanislaus&quot;, &quot;Sutter&quot;, &quot;Yuba&quot;, 
+               &quot;Tulare&quot;, &quot;Tuolumne&quot;, &quot;Yolo&quot;)
+  bay &lt;- c(&quot;Alameda&quot;, &quot;Contra Costa&quot;, &quot;Marin&quot;, &quot;Monterey&quot;, &quot;Napa&quot;, &quot;San Benito&quot;, 
+           &quot;San Francisco&quot;, &quot;San Mateo&quot;, &quot;Santa Clara&quot;, &quot;Santa Cruz&quot;, &quot;Solano&quot;, 
+           &quot;Sonoma&quot;)
+  southern &lt;- c(&quot;Imperial&quot;, &quot;Kern&quot;, &quot;Orange&quot;, &quot;Riverside&quot;, &quot;San Bernardino&quot;, 
+                &quot;San Diego&quot;, &quot;San Luis Obispo&quot;, &quot;Santa Barbara&quot;, &quot;Ventura&quot;, 
+                &quot;Los Angeles&quot;)
+  
+  download3 &lt;- getURL(
+    &quot;https://data.lacity.org/api/views/iv7a-6rrq/rows.csv?accessType=DOWNLOAD&quot;)
+  demoCA &lt;- read.csv(text = download3)
+  
+  demoCA &lt;- 
+    demoCA %&gt;%
+    filter(date == &quot;10/31/2021 12:00:00 AM&quot;) %&gt;%
+    filter(demographic_category == category) %&gt;%
+    mutate(region = case_when(county %in% superior ~ &quot;Superior&quot;,
+                              county %in% central ~ &quot;Central&quot;,
+                              county %in% bay ~ &quot;Bay Area&quot;,
+                              county %in% southern ~ &quot;Southern&quot;)) %&gt;%
+    summarise(date = date,
+              region = region,
+              county = county,
+              demographic_category = demographic_category,
+              demographic_value = demographic_value,
+              perc_fully_vax = (cumulative_fully_vaccinated/est_population))
+  
+  demoCA &lt;- na.omit(demoCA)
+  
+  demoCA &lt;-
+    demoCA %&gt;%
+    group_by(region, demographic_value) %&gt;%
+    summarise(region = region,
+              demographic_value = demographic_value,
+              region_fully_vax = mean(perc_fully_vax)*100)
+  
+  demoCA &lt;- unique(demoCA)
+  
+  return(demoCA)
+}</code></pre>
+<p><span class="math display">\[\\[.1in]\]</span></p>
+</div>
+<div id="datawrangle2" class="section level5">
+<h5><strong><em>datawrangle2()</em></strong></h5>
+<pre class="r"><code>datawrangle2 &lt;- function(category) {
+  # Region categories to sort counties
+  superior &lt;- c(&quot;Butte&quot;, &quot;Colusa&quot;, &quot;Del Norte&quot;, &quot;Glenn&quot;, &quot;Humboldt&quot;, &quot;Lake&quot;, 
+                &quot;Lassen&quot;, &quot;Mendocino&quot;, &quot;Modoc&quot;, &quot;Nevada&quot;, &quot;Plumas&quot;, &quot;Shasta&quot;, 
+                &quot;Sierra&quot;, &quot;Siskiyou&quot;, &quot;Tehama&quot;, &quot;Trinity&quot;)
+  central &lt;- c(&quot;Alpine&quot;, &quot;Amador&quot;, &quot;Calaveras&quot;, &quot;El Dorado&quot;, &quot;Fresno&quot;, &quot;Inyo&quot;, 
+               &quot;Kings&quot;, &quot;Madera&quot;, &quot;Mariposa&quot;, &quot;Merced&quot;, &quot;Mono&quot;, &quot;Placer&quot;, 
+               &quot;Sacramento&quot;, &quot;San Joaquin&quot;, &quot;Stanislaus&quot;, &quot;Sutter&quot;, &quot;Yuba&quot;, 
+               &quot;Tulare&quot;, &quot;Tuolumne&quot;, &quot;Yolo&quot;)
+  bay &lt;- c(&quot;Alameda&quot;, &quot;Contra Costa&quot;, &quot;Marin&quot;, &quot;Monterey&quot;, &quot;Napa&quot;, &quot;San Benito&quot;, 
+           &quot;San Francisco&quot;, &quot;San Mateo&quot;, &quot;Santa Clara&quot;, &quot;Santa Cruz&quot;, &quot;Solano&quot;, 
+           &quot;Sonoma&quot;)
+  southern &lt;- c(&quot;Imperial&quot;, &quot;Kern&quot;, &quot;Orange&quot;, &quot;Riverside&quot;, &quot;San Bernardino&quot;, 
+                &quot;San Diego&quot;, &quot;San Luis Obispo&quot;, &quot;Santa Barbara&quot;, &quot;Ventura&quot;, 
+                &quot;Los Angeles&quot;)
+  
+  download3 &lt;- getURL(
+    &quot;https://data.lacity.org/api/views/iv7a-6rrq/rows.csv?accessType=DOWNLOAD&quot;)
+  demoCA &lt;- read.csv(text = download3)
+  
+  demoCA &lt;- 
+    demoCA %&gt;%
+    filter(date == &quot;10/31/2021 12:00:00 AM&quot;) %&gt;%
+    filter(demographic_category == category) %&gt;%
+    mutate(region = case_when(county %in% superior ~ &quot;Superior&quot;,
+                              county %in% central ~ &quot;Central&quot;,
+                              county %in% bay ~ &quot;Bay Area&quot;,
+                              county %in% southern ~ &quot;Southern&quot;)) %&gt;%
+    summarise(date = date,
+              region = region,
+              county = county,
+              demographic_category = demographic_category,
+              demographic_value = demographic_value,
+              perc_fully_vax = (cumulative_fully_vaccinated/est_population))
+  
+  demoCA &lt;- na.omit(demoCA)
+  
+  demoCA &lt;-
+    demoCA %&gt;%
+    group_by(region, demographic_value) %&gt;%
+    summarise(region = region,
+              county = county,
+              demographic_value = demographic_value,
+              perc_fully_vax = perc_fully_vax*100)
+  
+  return(demoCA)
+}</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
