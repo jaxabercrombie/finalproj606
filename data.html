@@ -13,8 +13,8 @@
 
 <title>Data Sourcing and Wrangling</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -63,6 +63,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -83,6 +84,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -295,12 +299,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -308,7 +312,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -321,7 +325,7 @@ div.tocify {
   <a href="index.html">Project Homepage</a>
 </li>
 <li>
-  <a href="data.html">Data Sourcing and Processing</a>
+  <a href="data.html">Data Sourcing and Wrangling</a>
 </li>
 <li>
   <a href="tables.html">Data Tables</a>
@@ -331,6 +335,21 @@ div.tocify {
 </li>
 <li>
   <a href="contact.html">Contact Information</a>
+</li>
+<li>
+  <a href="Prog1.html">PM-606 Progress Report #1</a>
+</li>
+<li>
+  <a href="Prog2.html">PM-606 Progress Report #2</a>
+</li>
+<li>
+  <a href="Prog3.html">PM-606 Progress Report #3</a>
+</li>
+<li>
+  <a href="fp-h.html">PM-606 Final Report (w/o source code)</a>
+</li>
+<li>
+  <a href="fp-i.html">PM-606 Final Report (w/ source code)</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -352,20 +371,62 @@ div.tocify {
 <p><span class="math display">\[\\[.05in]\]</span></p>
 <div id="finding-the-data" class="section level3">
 <h3><u>Finding the Data</u></h3>
-<p>Once deciding on primary and secondary research questions, the search for the datasets used in this project became easier. Since data repositories for COVID-19 are often readily available to the public these days, finding government websites to export data was fairly easy, and the LA City Data site and the California Department of Health and Human Services were wonderful sources of thorough data. However, because my questions were varied in topic, I had to use multiple datasets and find means to merge them in some cases.</p>
+<p>Once deciding on primary and secondary research questions, the search
+for the datasets used in this project became easier. Since data
+repositories for COVID-19 are often readily available to the public
+these days, finding government websites to export data was fairly easy,
+and the LA City Data site and the California Department of Health and
+Human Services were wonderful sources of thorough data. However, because
+my questions were varied in topic, I had to use multiple datasets and
+find means to merge them in some cases.</p>
 <p><span class="math display">\[\\[.1in]\]</span></p>
 </div>
 <div id="about-the-datasets-used" class="section level3">
 <h3><u>About the Datasets Used</u></h3>
-<p>There were three different sets of data used for this project: (1) data for CA counties and their administered vaccine doses, (2) data regarding COVID-19 cases and deaths for each CA county, and (3) demographic data based on vaccine administration. Each data set was used up until the date of October 31, 2021 for consistency and to ensure the most complete data was used.</p>
-<p>The data about vaccine doses for each county, titled “Vaccines by California County,” came from LA city’s data site at <a href="https://data.lacity.org/COVID-19/Vaccines-by-California-County/rpp7-mevy">this link</a>. This particular set has data from the start of vaccine roll-out in mid-December 2020 and is updated regularly. It includes dose data for each vaccine company per county, county population count, and administration date, among many other variables.</p>
-<p>Data regarding COVID-related cases and deaths, titled “Statewide COVID-19 Cases Deaths Tests,” came from the California Department of Health and Human Services at <a href="https://data.chhs.ca.gov/dataset/covid-19-time-series-metrics-by-county-and-state/resource/046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a">this link</a>. Variables include COVID-related cases and deaths, both raw and cumulative, tests conducted, and population counts, among many other variables. The data begins in February of 2020 and is updated regularly.</p>
-<p>The set of data containing information about administered vaccines by demographic characteristics, titled “Vaccine demographic data,” was sourced from <a href="https://data.lacity.org/COVID-19/Vaccine-demographic-data/iv7a-6rrq">this link</a>. It contains data about who is fully and partially vaccinated based on demographic characteristics like age and race and ethnicity. Complete data is roughly up to October 31, 2021, which explains why the figures and tables created for the data use that date.</p>
+<p>There were three different sets of data used for this project: (1)
+data for CA counties and their administered vaccine doses, (2) data
+regarding COVID-19 cases and deaths for each CA county, and (3)
+demographic data based on vaccine administration. Each data set was used
+up until the date of October 31, 2021 for consistency and to ensure the
+most complete data was used.</p>
+<p>The data about vaccine doses for each county, titled “Vaccines by
+California County,” came from LA city’s data site at <a
+href="https://data.lacity.org/COVID-19/Vaccines-by-California-County/rpp7-mevy">this
+link</a>. This particular set has data from the start of vaccine
+roll-out in mid-December 2020 and is updated regularly. It includes dose
+data for each vaccine company per county, county population count, and
+administration date, among many other variables.</p>
+<p>Data regarding COVID-related cases and deaths, titled “Statewide
+COVID-19 Cases Deaths Tests,” came from the California Department of
+Health and Human Services at <a
+href="https://data.chhs.ca.gov/dataset/covid-19-time-series-metrics-by-county-and-state/resource/046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a">this
+link</a>. Variables include COVID-related cases and deaths, both raw and
+cumulative, tests conducted, and population counts, among many other
+variables. The data begins in February of 2020 and is updated
+regularly.</p>
+<p>The set of data containing information about administered vaccines by
+demographic characteristics, titled “Vaccine demographic data,” was
+sourced from <a
+href="https://data.lacity.org/COVID-19/Vaccine-demographic-data/iv7a-6rrq">this
+link</a>. It contains data about who is fully and partially vaccinated
+based on demographic characteristics like age and race and ethnicity.
+Complete data is roughly up to October 31, 2021, which explains why the
+figures and tables created for the data use that date.</p>
 <p><span class="math display">\[\\[.1in]\]</span></p>
 </div>
 <div id="wrangling-the-data" class="section level3">
 <h3><u>Wrangling the Data</u></h3>
-<p>In original iterations of this project, the demographic data for age and race was incredibly large, rendering GitHub commits and pushes unable to be carried out. To fix this issue, functions for cleaning and wrangling the entire dataset were created. A single day of information was extracted from the demographic datasets, a region variable was created from county data, a variable for percent individuals fully vaccinated was created, and unique rows were eliminated for ease of plotting the data. The difference between the first and second <em>datawrangle()</em> and <em>datawrangle2()</em> functions is whether unique rows are removed in order to show how data is stratified when used in tables.</p>
+<p>In original iterations of this project, the demographic data for age
+and race was incredibly large, rendering GitHub commits and pushes
+unable to be carried out. To fix this issue, functions for cleaning and
+wrangling the entire dataset were created. A single day of information
+was extracted from the demographic datasets, a region variable was
+created from county data, a variable for percent individuals fully
+vaccinated was created, and unique rows were eliminated for ease of
+plotting the data. The difference between the first and second
+<em>datawrangle()</em> and <em>datawrangle2()</em> functions is whether
+unique rows are removed in order to show how data is stratified when
+used in tables.</p>
 <div id="datawrangle" class="section level5">
 <h5><strong><em>datawrangle()</em></strong></h5>
 <pre class="r"><code>datawrangle &lt;- function(category) {
@@ -508,6 +569,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
