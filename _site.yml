@@ -25,4 +25,4 @@ navbar:
       href: fp-i.html
 output:
   html_document:
-    theme: sandstone
+    theme: default
